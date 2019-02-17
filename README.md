@@ -5,8 +5,6 @@ python utility scripts for my private projects
 ```
 $ pip install fn-reflection
 ```
-or
-
 ## How to use
 ```
 import fn-reflection
