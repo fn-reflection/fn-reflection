@@ -14,15 +14,17 @@ def run_once(f: _capcell.typing.Callable):
 
 
 def chain(value, fargs: _capcell.typing.Iterable):
+    def list_or_tuple(x):
+        return isinstance(x, list) or isinstance(x, tuple)
     for farg in fargs:
-        if not isinstance(farg, _capcell.collections.abc.Iterable):
+        if not list_or_tuple(farg):
             f = farg
             val = f(value)
         else:
             f, arg = farg
             if isinstance(arg, dict):
                 val = f(value, **arg)
-            elif isinstance(arg, _capcell.collections.abc.Iterable):
+            elif list_or_tuple(arg):
                 val = f(value, *arg)
             else:
                 val = f(value, arg)
