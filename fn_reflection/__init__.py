@@ -1,1 +1,2 @@
-version = '0.2.0'
+from . import util
+version = '0.2.1'

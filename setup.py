@@ -3,7 +3,7 @@
 import sys
 from setuptools import setup
 
-if sys.version_info[:2] < (3, 5):
+if not sys.version_info[:2] >= (3, 5):
     raise RuntimeError("Python version >= 3.5 required.")
 
 

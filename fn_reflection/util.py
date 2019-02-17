@@ -1,10 +1,10 @@
 # pylint: disable=missing-docstring,invalid-name
 # %%
-from typing import List, Callable, Iterable
+import typing
 import collections
 
 
-def run_once(f: Callable):
+def run_once(f: typing.Callable):
     def wrapper(*args, **kwargs):
         if not wrapper.has_run:
             wrapper.has_run = True
@@ -13,7 +13,7 @@ def run_once(f: Callable):
     return wrapper
 
 
-def chain(value, fargs: Iterable):
+def chain(value, fargs: typing.Iterable):
     for farg in fargs:
         if not isinstance(farg, collections.abc.Iterable):
             f = farg
