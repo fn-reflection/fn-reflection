@@ -1,3 +1,3 @@
 from . import decorator
 from . import func
-version = '0.2.6'
+version = '0.2.7'

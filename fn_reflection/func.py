@@ -1,6 +1,6 @@
 # pylint: disable=missing-docstring,invalid-name
 # %%
-__all__ = ['setup_logger']
+__all__ = ['setup_logger', 'partitionby']
 import fn_reflection._external as _e
 
 
@@ -19,3 +19,15 @@ def setup_logger(logger: _e.logging.Logger,
         logger.addHandler(sh)
         logger.addHandler(fh)
     return logger
+
+
+def partitionby(coll, f):
+    flip_flop = False
+
+    def switch(item):
+        nonlocal flip_flop
+        if f(item):
+            flip_flop = not flip_flop
+        return flip_flop
+    return map(lambda grp: list(grp[1]),
+               _e.itertools.groupby(coll, switch))
