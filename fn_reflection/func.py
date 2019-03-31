@@ -7,7 +7,7 @@ import fn_reflection._external as _e
 def setup_logger(logger: _e.logging.Logger,
                  log_path: str,
                  fmt: str = 't:%(asctime)s\tlv:%(levelname)s\tn:%(name)s\tm:%(message)s')->None:
-    if _e.os.path.exists(log_path):
+    if not _e.os.path.exists(log_path):
         print(f'log file not found, log_path:{log_path}', file=_e.sys.stderr)
         return
     if not logger.handlers:
