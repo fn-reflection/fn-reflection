@@ -1,4 +1,3 @@
-# pylint: disable=redefined-outer-name,missing-docstring,invalid-name
 import smtplib
 import email.mime.text
 import email.utils
@@ -27,4 +26,3 @@ def _mail_send(smtp_host, smtp_port, addrs, password, mimetext):
 def gmail_send(addrs, password, subject, body):
     _mail_send('smtp.gmail.com', 587,
                addrs, password, create_mimetext(addrs, subject, body))
-

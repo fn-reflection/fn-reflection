@@ -1,12 +1,10 @@
-# pylint: disable=missing-docstring,invalid-name
-# %%
-__all__ = ['setup_logger', 'partitionby']
+__all__ = ['setup_logger', 'partitionby', 'caller_context']
 import fn_reflection._external as _e
 
 
 def setup_logger(logger: _e.logging.Logger,
                  log_path: str,
-                 fmt: str = 't:%(asctime)s\tlv:%(levelname)s\tn:%(name)s\tm:%(message)s')->None:
+                 fmt: str = 't:%(asctime)s\tlv:%(levelname)s\tn:%(name)s\tm:%(message)s') -> None:
     if not _e.os.path.exists(log_path):
         print(f'log file not found, log_path:{log_path}', file=_e.sys.stderr)
         return
@@ -31,3 +29,8 @@ def partitionby(coll, f):
         return flip_flop
     return map(lambda grp: list(grp[1]),
                _e.itertools.groupby(coll, switch))
+
+
+def caller_context():
+    x = _e.inspect.stack()[1]
+    return f'file:{x[1]}\tline:{x[2]}\tfuncname:{x[3]}'
