@@ -1,5 +1,3 @@
-# pylint: disable=missing-docstring,invalid-name
-# %%
 __all__ = ['run_once']
 import fn_reflection._external as _e
 
