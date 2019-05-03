@@ -1,4 +1,5 @@
-__all__ = ['setup_logger', 'partitionby', 'caller_context']
+__all__ = ['setup_logger', 'partitionby',
+           'caller_context', 'unregistered_data']
 import fn_reflection._external as _e
 
 
@@ -35,3 +36,14 @@ def caller_context():
     x = _e.inspect.stack()[1]
     return f'file:{x[1]}\tline:{x[2]}\tfuncname:{x[3]}'
 
+
+def unregistered_data(df1: _e.pandas.DataFrame, df2: _e.pandas.DataFrame, identify):
+    if df2.empty:
+        return df1
+    midf1 = df1.set_index(identify)
+    midf2 = df2.drop_duplicates(identify).set_index(identify)
+    joined = _e.pandas.concat([midf1, midf2], axis=1, keys=['a', 'b'])
+    remove_dup = joined[joined.loc[:, ('b', '_id')].isna()]
+    if 'a' in remove_dup.columns:
+        return remove_dup['a'].reset_index()
+    return remove_dup.reset_index()
