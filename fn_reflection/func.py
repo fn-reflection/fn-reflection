@@ -38,7 +38,7 @@ def caller_context():
 
 
 def unregistered_data(df1: _e.pandas.DataFrame, df2: _e.pandas.DataFrame, identify):
-    if df2.empty:
+    if (not df2) or df2.empty:
         return df1
     midf1 = df1.set_index(identify)
     midf2 = df2.drop_duplicates(identify).set_index(identify)
