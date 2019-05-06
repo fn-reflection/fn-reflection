@@ -20,6 +20,19 @@ def setup_logger(logger: _e.logging.Logger,
     return logger
 
 
+def success_or_warning(logger, func: callable, *args, **kwargs):
+    try:
+        res = func()
+    except Exception as e:
+        msg = e.__class__.__name__ + str(e.args)
+        if logger:
+            logger.warning(msg)
+        else:
+            print(msg, file=_e.sys.stderr)
+    else:
+        return res
+
+
 def partitionby(coll, f):
     flip_flop = False
 
@@ -38,7 +51,7 @@ def caller_context():
 
 
 def unregistered_data(df1: _e.pandas.DataFrame, df2: _e.pandas.DataFrame, identify):
-    if (not df2) or df2.empty:
+    if df2 is None or df2.empty:
         return df1
     midf1 = df1.set_index(identify)
     midf2 = df2.drop_duplicates(identify).set_index(identify)
