@@ -3,6 +3,16 @@ __all__ = ['setup_logger', 'partitionby',
 import fn_reflection._external as _e
 
 
+def multiple_sort(xs, specs):
+    if isinstance(specs, list) or isinstance(specs, tuple):
+        getter = _e.operator.itemgetter
+    else:
+        getter = _e.operator.attrgetter
+    for key, reverse in reversed(specs):
+        xs.sort(key=getter(key), reverse=reverse)
+    return xs
+
+
 def setup_logger(logger: _e.logging.Logger,
                  log_path: str,
                  fmt: str = 't:%(asctime)s\tlv:%(levelname)s\tn:%(name)s\tm:%(message)s') -> None:
