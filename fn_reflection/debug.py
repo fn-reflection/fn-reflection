@@ -4,6 +4,7 @@ import logging
 import sys
 import os
 
+
 def setup_logger(logger: logging.Logger,
                  log_path: str,
                  fmt: str = 't:%(asctime)s\tlv:%(levelname)s\tn:%(name)s\tm:%(message)s') -> None:
@@ -38,7 +39,7 @@ def exception_dict(tb, e, max_frame=5):
     d = dict(utcnow=datetime.utcnow(), exception=e, frames=[])
     for i in range(max_frame):
         frame_d = dict(where=f"file:{tb.tb_frame.f_code.co_filename},line:{tb.tb_lineno},func:{tb.tb_frame.f_code.co_name}",
-                       locals={k: v for k, v in tb.tb_frame.f_locals.items() if k not in ['e', '_', 'tb']})
+                       locals={k: v for k, v in tb.tb_frame.f_locals.items() if k not in ['e', '_', 'tb', 'username', 'password'})
         d['frames'].append(frame_d)
         tb = tb.tb_next
         if tb is None:
