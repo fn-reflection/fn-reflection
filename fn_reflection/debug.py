@@ -1,18 +1,20 @@
-__all__ = ['setup_logger', 'partitionby',
-           'caller_context', 'unregistered_data']
-import fn_reflection._external as _e
+__all__ = ['setup_logger', 'success_or_warning',
+           'exception_dict', 'caller_context']
+import logging
+import sys
+import os
 
-def setup_logger(logger: _e.logging.Logger,
+def setup_logger(logger: logging.Logger,
                  log_path: str,
                  fmt: str = 't:%(asctime)s\tlv:%(levelname)s\tn:%(name)s\tm:%(message)s') -> None:
-    if not _e.os.path.exists(log_path):
-        print(f'log file not found, log_path:{log_path}', file=_e.sys.stderr)
+    if not os.path.exists(log_path):
+        print(f'log file not found, log_path:{log_path}', file=sys.stderr)
         return
     if not logger.handlers:
-        fmtr = _e.logging.Formatter(fmt)
-        sh = _e.logging.StreamHandler()
+        fmtr = logging.Formatter(fmt)
+        sh = logging.StreamHandler()
         sh.setFormatter(fmtr)
-        fh = _e.logging.FileHandler(filename=log_path)
+        fh = logging.FileHandler(filename=log_path)
         fh.setFormatter(fmtr)
         logger.addHandler(sh)
         logger.addHandler(fh)
@@ -27,9 +29,10 @@ def success_or_warning(logger, func: callable, *args, **kwargs):
         if logger:
             logger.warning(msg)
         else:
-            print(msg, file=_e.sys.stderr)
+            print(msg, file=sys.stderr)
     else:
         return res
+
 
 def exception_dict(tb, e, max_frame=5):
     d = dict(utcnow=datetime.utcnow(), exception=e, frames=[])
