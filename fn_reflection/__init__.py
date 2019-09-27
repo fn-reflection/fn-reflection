@@ -1,5 +1,5 @@
-from . import decorator
-from . import func
-from . import cls
-from . import send_mail
-version = '0.3.7'
+from . import algorithm
+from . import debug
+from . import mail
+from . import sys
+version = '1.0.0'

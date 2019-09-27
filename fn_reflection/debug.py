@@ -2,17 +2,6 @@ __all__ = ['setup_logger', 'partitionby',
            'caller_context', 'unregistered_data']
 import fn_reflection._external as _e
 
-
-def multiple_sort(xs, specs):
-    if isinstance(specs, list) or isinstance(specs, tuple):
-        getter = _e.operator.itemgetter
-    else:
-        getter = _e.operator.attrgetter
-    for key, reverse in reversed(specs):
-        xs.sort(key=getter(key), reverse=reverse)
-    return xs
-
-
 def setup_logger(logger: _e.logging.Logger,
                  log_path: str,
                  fmt: str = 't:%(asctime)s\tlv:%(levelname)s\tn:%(name)s\tm:%(message)s') -> None:
@@ -42,19 +31,13 @@ def success_or_warning(logger, func: callable, *args, **kwargs):
     else:
         return res
 
-
-def partitionby(coll, f):
-    flip_flop = False
-
-    def switch(item):
-        nonlocal flip_flop
-        if f(item):
-            flip_flop = not flip_flop
-        return flip_flop
-    return map(lambda grp: list(grp[1]),
-               _e.itertools.groupby(coll, switch))
-
-
-def caller_context():
-    x = _e.inspect.stack()[1]
-    return f'file:{x[1]}\tline:{x[2]}\tfuncname:{x[3]}'
+def exception_dict(tb, e, max_frame=5):
+    d = dict(utcnow=datetime.utcnow(), exception=e, frames=[])
+    for i in range(max_frame):
+        frame_d = dict(where=f"file:{tb.tb_frame.f_code.co_filename},line:{tb.tb_lineno},func:{tb.tb_frame.f_code.co_name}",
+                       locals={k: v for k, v in tb.tb_frame.f_locals.items() if k not in ['e', '_', 'tb']})
+        d['frames'].append(frame_d)
+        tb = tb.tb_next
+        if tb is None:
+            return d
+    return d
