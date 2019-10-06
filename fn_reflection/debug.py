@@ -1,8 +1,16 @@
-__all__ = ['setup_logger', 'success_or_warning',
-           'exception_dict', 'caller_context']
+import time
 import logging
 import sys
 import os
+from pathlib import Path
+from datetime import datetime
+from fn_reflection.time import yymmdd, yymmddhh, yymmddhhmm, yymmddhhmmss
+from fn_reflection.os import filedatasync
+
+__all__ = ['setup_logger', 'success_or_warning',
+           'exception_dict', 'caller_context']
+NOW_RESOLUTIONS = {'1d': yymmdd, '1h': yymmddhh,
+                   '1m': yymmddhhmm, '1s': yymmddhhmmss}
 
 
 def setup_logger(logger: logging.Logger,
@@ -20,6 +28,17 @@ def setup_logger(logger: logging.Logger,
         logger.addHandler(sh)
         logger.addHandler(fh)
     return logger
+
+
+def persistent_rotate(s, file_prefix, dir_name="persistent", ext='txt', duration='1h'):
+    dir_path = Path(dir_name)
+    if not dir_path.exists():
+        dir_path.mkdir()
+    file_path = dir_path / f"{file_prefix}_{NOW_RESOLUTIONS[duration]()}.{ext}"
+    with file_path.open(mode='a', encoding='utf-8') as f:
+        print(s, file=f)
+        f.flush()
+        filedatasync(f.fileno())
 
 
 def success_or_warning(logger, func: callable, *args, **kwargs):
@@ -45,3 +64,9 @@ def exception_dict(tb, e, max_frame=5):
         if tb is None:
             return d
     return d
+
+
+if __name__ == "__main__":
+    while True:
+        time.sleep(5)
+        persistent_rotate(NOW_RESOLUTIONS['1s'](), 'test')
