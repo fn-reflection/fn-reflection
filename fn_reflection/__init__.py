@@ -1,5 +1,7 @@
-from . import algorithm
+from . import collections
 from . import debug
 from . import mail
+from . import os
 from . import sys
-version = '1.0.3'
+from . import time
+version = '1.0.7'
