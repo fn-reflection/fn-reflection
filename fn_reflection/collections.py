@@ -1,6 +1,6 @@
 import operator
 import itertools
-__all__ = ['multiple_sort',  'partition_by']
+__all__ = ['multiple_sort', 'partition_by', 'ignore_none_dict']
 
 
 def partition_by(coll, f):
@@ -22,3 +22,7 @@ def multiple_sort(xs, specs):
     for key, reverse in reversed(specs):
         xs.sort(key=getter(key), reverse=reverse)
     return xs
+
+
+def ignore_none_dict(**args):
+    return {k: v for k, v in args.items() if v is not None}
