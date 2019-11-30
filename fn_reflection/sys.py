@@ -1,3 +1,4 @@
+# pylint:disable=dangerous-default-value
 import inspect
 import typing
 import threading
