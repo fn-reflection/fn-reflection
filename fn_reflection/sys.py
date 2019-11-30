@@ -2,13 +2,14 @@ import inspect
 import typing
 import threading
 
+
 def caller_context():
     x = inspect.stack()[1]
     return f'file:{x[1]}\tline:{x[2]}\tfuncname:{x[3]}'
 
 
-def run_in_daemon_thread(func):
-    t = threading.Thread(target=func, daemon=True)
+def run_in_daemon_thread(func, args=(), kwargs={}):
+    t = threading.Thread(target=func, daemon=True, args=args, kwargs=kwargs)
     t.start()
     return t
 
