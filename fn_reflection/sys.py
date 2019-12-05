@@ -1,4 +1,5 @@
 # pylint:disable=dangerous-default-value
+import time
 import inspect
 import typing
 import threading
@@ -13,6 +14,14 @@ def run_in_daemon_thread(func, args=(), kwargs={}):
     t = threading.Thread(target=func, daemon=True, args=args, kwargs=kwargs)
     t.start()
     return t
+
+
+def wait_sigint(wait_interval=10000):
+    try:
+        while True:
+            time.sleep(wait_interval)
+    except KeyboardInterrupt:
+        pass
 
 
 def run_once(f: typing.Callable):
