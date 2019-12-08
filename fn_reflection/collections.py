@@ -1,6 +1,7 @@
 import operator
 import itertools
-__all__ = ['multiple_sort', 'partition_by', 'ignore_none_dict']
+__all__ = ['multiple_sort', 'partition_by',
+           'ignore_none_dict', 'CyclicCounter']
 
 
 def partition_by(coll, f):
@@ -26,3 +27,15 @@ def multiple_sort(xs, specs):
 
 def ignore_none_dict(**args):
     return {k: v for k, v in args.items() if v is not None}
+
+
+class CyclicCounter:
+    def __init__(self, limit: int = 1000000000):
+        self.counter: int = 0
+        self.limit: int = limit
+
+    def up(self, num: int = 1):
+        value = self.counter
+        self.counter += num
+        self.counter %= self.limit
+        return value
