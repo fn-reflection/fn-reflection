@@ -16,10 +16,8 @@ def partition_by(coll, f):
 
 
 def multiple_sort(xs, specs):
-    if isinstance(specs, list) or isinstance(specs, tuple):
-        getter = operator.itemgetter
-    else:
-        getter = operator.attrgetter
+    getter = (operator.itemgetter if isinstance(specs, list) or isinstance(specs, tuple)
+              else operator.attrgetter)
     for key, reverse in reversed(specs):
         xs.sort(key=getter(key), reverse=reverse)
     return xs
