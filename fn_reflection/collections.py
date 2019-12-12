@@ -1,7 +1,8 @@
 import operator
 import itertools
+from typing import Dict
 __all__ = ['multiple_sort', 'partition_by',
-           'ignore_none_dict', 'CyclicCounter']
+           'ignore_none_dict', 'renamed_dict' 'CyclicCounter']
 
 
 def partition_by(coll, f):
@@ -25,6 +26,10 @@ def multiple_sort(xs, specs):
 
 def ignore_none_dict(**args):
     return {k: v for k, v in args.items() if v is not None}
+
+
+def renamed_dict(d: Dict, rename_d: Dict):
+    return {key_to: d[key_from] for key_from, key_to in rename_d.items()}
 
 
 class CyclicCounter:
