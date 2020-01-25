@@ -15,7 +15,7 @@ NOW_RESOLUTIONS = {'1d': yymmdd, '1h': yymmddhh,
 
 def setup_logger(logger: logging.Logger,
                  log_path: str,
-                 loglevel: int = logging.DEBUG,
+                 loglevel: int = logging.WARNING,
                  streamloglevel: int = logging.INFO,
                  fmt: str = 't:%(asctime)s\tlv:%(levelname)s\tn:%(name)s\tm:%(message)s') -> None:
     logger.setLevel(loglevel)
@@ -32,6 +32,7 @@ def setup_logger(logger: logging.Logger,
             fh.setFormatter(fmtr)
             logger.addHandler(fh)
     return logger
+
 
 def persistent_rotate(s, file_prefix, dir_name="persistent", ext='txt', duration='1h'):
     dir_path = Path(dir_name)
