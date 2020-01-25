@@ -15,20 +15,23 @@ NOW_RESOLUTIONS = {'1d': yymmdd, '1h': yymmddhh,
 
 def setup_logger(logger: logging.Logger,
                  log_path: str,
+                 loglevel: int = logging.DEBUG,
+                 streamloglevel: int = logging.INFO,
                  fmt: str = 't:%(asctime)s\tlv:%(levelname)s\tn:%(name)s\tm:%(message)s') -> None:
-    if not os.path.exists(log_path):
-        print(f'log file not found, log_path:{log_path}', file=sys.stderr)
-        return
+    logger.setLevel(loglevel)
     if not logger.handlers:
         fmtr = logging.Formatter(fmt)
         sh = logging.StreamHandler()
         sh.setFormatter(fmtr)
-        fh = logging.FileHandler(filename=log_path)
-        fh.setFormatter(fmtr)
+        sh.setLevel(streamloglevel)
         logger.addHandler(sh)
-        logger.addHandler(fh)
+        if not os.path.exists(log_path):
+            print(f'log file not found, log_path:{log_path}', file=sys.stderr)
+        else:
+            fh = logging.FileHandler(filename=log_path)
+            fh.setFormatter(fmtr)
+            logger.addHandler(fh)
     return logger
-
 
 def persistent_rotate(s, file_prefix, dir_name="persistent", ext='txt', duration='1h'):
     dir_path = Path(dir_name)
