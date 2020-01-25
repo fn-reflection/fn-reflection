@@ -31,3 +31,12 @@ def run_once(f: typing.Callable):
             return f(*args, **kwargs)
     wrapper.has_run = False
     return wrapper
+
+
+def get_runtime():
+    get_ipython = inspect.stack()[1].frame.f_globals.get('get_ipython')
+    if not get_ipython:
+        return 'python'
+    if get_ipython().__class__.__name__ == 'TerminalInteractiveShell':
+        return 'ipython'
+    return 'jupyter'
