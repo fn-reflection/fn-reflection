@@ -9,8 +9,8 @@ from fn_reflection.os import filedatasync
 
 __all__ = ['setup_logger', 'success_or_warning',
            'exception_dict', 'caller_context']
-NOW_RESOLUTIONS = {'1d': yymmdd, '1h': yymmddhh,
-                   '1m': yymmddhhmm, '1s': yymmddhhmmss}
+ROTATION_FREQUENCY = {'1d': yymmdd, '1h': yymmddhh,
+                      '1m': yymmddhhmm, '1s': yymmddhhmmss}
 
 
 def setup_logger(logger: logging.Logger,
@@ -38,7 +38,8 @@ def persistent_rotate(s, file_prefix, dir_name="persistent", ext='txt', duration
     dir_path = Path(dir_name)
     if not dir_path.exists():
         dir_path.mkdir()
-    file_path = dir_path / f"{file_prefix}_{NOW_RESOLUTIONS[duration]()}.{ext}"
+    file_path = dir_path / \
+        f"{file_prefix}_{ROTATION_FREQUENCY[duration]()}.{ext}"
     with file_path.open(mode='a', encoding='utf-8') as f:
         print(s, file=f)
         f.flush()
@@ -68,9 +69,3 @@ def exception_dict(tb, e, max_frame=5):
         if tb is None:
             return d
     return d
-
-
-if __name__ == "__main__":
-    while True:
-        time.sleep(5)
-        persistent_rotate(NOW_RESOLUTIONS['1s'](), 'test')
