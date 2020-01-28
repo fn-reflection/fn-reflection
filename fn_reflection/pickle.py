@@ -1,17 +1,22 @@
 import pickle
 import time
-import os
 from pathlib import Path
 
 
-def to_pickle4(obj, filename):
-    with open(filename, mode='wb') as f:
-        pickle.dump(obj=obj, file=f, protocol=4)
+def to_pickle(obj, filepath: str, protocol: int):
+    with open(filepath, mode='wb') as f:
+        pickle.dump(obj=obj, file=f, protocol=protocol)
 
 
-def to_pickle4_with_timestamp(obj, prefix='', makedirs=True):
+def to_pickle_with_timestamp(obj, protocol: int, prefix: str = '', makedirs: bool = True):
     filepath = Path(f'{prefix}{int(time.time()*1000)}')
     if makedirs:
         filepath.parent.mkdir(parents=True, exist_ok=True)
     with open(filepath, mode='wb') as f:
-        pickle.dump(obj=obj, file=f, protocol=4)
+        pickle.dump(obj=obj, file=f, protocol=protocol)
+
+
+def from_pickle(pickle_file):
+    with open(pickle_file, mode='rb') as f:
+        obj = pickle.load(file=f)
+    return obj
