@@ -2,6 +2,7 @@
 import time
 import inspect
 import typing
+from typing import Callable
 import threading
 
 
@@ -16,12 +17,13 @@ def run_in_daemon_thread(func, args=(), kwargs={}):
     return t
 
 
-def wait_sigint(wait_interval=10000):
+def wait_sigint(on_sigint: Callable = None, wait_interval=10000):
     try:
         while True:
             time.sleep(wait_interval)
     except KeyboardInterrupt:
-        pass
+        if on_sigint:
+            on_sigint()
 
 
 def run_once(f: typing.Callable):
