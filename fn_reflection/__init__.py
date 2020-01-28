@@ -2,6 +2,7 @@ from . import collections
 from . import concurrent
 from . import debug
 from . import exception
+from . import file
 from . import importlib
 from . import mail
 from . import observed
