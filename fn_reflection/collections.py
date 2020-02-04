@@ -2,7 +2,7 @@ import operator
 import itertools
 from typing import Dict, Deque, Callable
 __all__ = ['multiple_sort', 'partition_by',
-           'ignore_none_dict', 'renamed_dict' 'CyclicCounter']
+           'ignore_none_dict', 'renamed_dict', 'CyclicCounter']
 
 
 def partition_by(coll, f):
