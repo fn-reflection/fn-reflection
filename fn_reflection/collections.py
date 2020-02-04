@@ -1,6 +1,6 @@
 import operator
 import itertools
-from typing import Dict
+from typing import Dict, Deque, Callable
 __all__ = ['multiple_sort', 'partition_by',
            'ignore_none_dict', 'renamed_dict' 'CyclicCounter']
 
@@ -42,3 +42,15 @@ class CyclicCounter:
         self.counter += num
         self.counter %= self.limit
         return value
+
+
+def clear_old_element(deque: Deque, predicate: Callable):
+    length = len(deque)
+    old_element_count = 0
+    for i in range(length):
+        if predicate(deque[i]):
+            old_element_count += 1
+        else:
+            break
+    for i in range(old_element_count):
+        deque.popleft()
