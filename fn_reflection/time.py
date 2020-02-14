@@ -2,7 +2,7 @@ import time
 from datetime import datetime
  
 def yymmdd():
-    d = datetime.utcnow().strftime("%y%m%d")
+    return datetime.utcnow().strftime("%y%m%d")
 
 
 def yymmddhh():
