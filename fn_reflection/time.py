@@ -31,3 +31,19 @@ def unix_time_jp():
 
 def unix_time_nano_jp():
     return int(datetime.now().timestamp()*1e9)
+
+
+def timeit(func):
+    def decorate(*args, **kw):
+        n = kw.get('timeit_iter',1)
+        t_start = time.time()
+        for _ in range(n):
+            result = func(*args, **kw)
+        t_end = time.time()
+        elapsed = t_end-t_start
+        if 'timeit_logger' in kw:
+            kw['timeit_logger'][f"{func.__name__}_{n}"] = elapsed
+        else:
+            print(f'{func.__name__}, {elapsed:2.5f} ms')
+        return result
+    return decorate
