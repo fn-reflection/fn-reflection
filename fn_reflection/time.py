@@ -1,6 +1,7 @@
 import time
 from datetime import datetime
- 
+
+
 def yymmdd():
     return datetime.utcnow().strftime("%y%m%d")
 
@@ -35,7 +36,7 @@ def unix_time_nano_jp():
 
 def timeit(func):
     def decorate(*args, **kw):
-        n = kw.get('timeit_iter',1)
+        n = kw.get('timeit_iter', 1)
         t_start = time.time()
         for _ in range(n):
             result = func(*args, **kw)
