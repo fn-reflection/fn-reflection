@@ -1,7 +1,8 @@
 import time
 import gc
 from datetime import datetime
-from typing import Mapping, Any, Callable
+from typing import Mapping, Any, Callable,Union
+from logging import Logger
 from itertools import repeat
 import functools
 from .hash import fastdigest
@@ -59,7 +60,7 @@ def _timewatch(f, n, timer=time.perf_counter(),
 
 def timeit(f: Callable, setup: Callable = None, time_limit: int = 1, n: int = None,
            with_args_digest: bool = False, timer=time.perf_counter,
-           out: Mapping[str, Any] = None):
+           out: Union[Mapping[str, Any],Logger] = None):
     gc_was_enabled = gc.isenabled()
     result = None
     try:
@@ -86,10 +87,12 @@ def timeit(f: Callable, setup: Callable = None, time_limit: int = 1, n: int = No
                 args_digest = fastdigest(f.args)
         else:
             name = f.__name__
-        if out is not None and isinstance(out, dict):
+        if out is None:
+            print(f'{name}{args_digest},avg_elapsed={elapsed:2.3f}ms,n={n}')
+        elif isinstance(out, dict):
             out[name+args_digest] = [elapsed/n, n]
-        else:
-            print(f'{name}{args_digest},avg_elapsed={elapsed:2.3f}ms,iter=n')
+        elif isinstance(out,Logger):
+            out.debug(f'{name}{args_digest},avg_elapsed={elapsed:2.3f}ms,n={n}')
     finally:
         if gc_was_enabled:
             gc.enable()
