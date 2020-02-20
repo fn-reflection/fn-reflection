@@ -8,6 +8,7 @@ from . import mail
 from . import observed
 from . import os
 from . import pickle
+from . import shell
 from . import sys
 from . import time
 from . import urllib
