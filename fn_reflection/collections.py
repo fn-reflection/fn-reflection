@@ -44,13 +44,12 @@ class CyclicCounter:
         return value
 
 
-def clear_old_element(deque: Deque, predicate: Callable):
-    length = len(deque)
+def pop_old_elements(deque: Deque, predicate: Callable):
     old_element_count = 0
-    for i in range(length):
-        if predicate(deque[i]):
+    for elem in deque:
+        if predicate(elem):
             old_element_count += 1
         else:
             break
-    for i in range(old_element_count):
+    for _ in range(old_element_count):
         deque.popleft()
