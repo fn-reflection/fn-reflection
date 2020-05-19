@@ -11,5 +11,6 @@ from . import pickle
 from . import shell
 from . import sys
 from . import time
+from . import typed_dict
 from . import urllib
 version = '1.1.0'
