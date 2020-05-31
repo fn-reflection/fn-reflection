@@ -5,7 +5,6 @@ from . import exception
 from . import file
 from . import importlib
 from . import mail
-from . import observed
 from . import os
 from . import pickle
 from . import shell
