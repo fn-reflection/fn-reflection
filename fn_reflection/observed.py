@@ -2,24 +2,24 @@ from typing import List, Callable, Any
 
 
 class Observed:
-    def __init__(self, value: Any = None, callbacks: List[Callable[[Any], Any]] = None):
-        self._v: Any = value
-        self._cbs: List[Callable[[Any], Any]] = callbacks if callbacks else []
+    def __init__(self, data: Any = None, callbacks: List[Callable[[Any], Any]] = None):
+        self._data: Any = data
+        self._callbacks: List[Callable[[Any], Any]] = callbacks if callbacks else []
 
     @property
-    def v(self):
-        return self._v
+    def data(self):
+        return self._data
 
-    @v.setter
-    def v(self, value: Any):
-        self._v = value
-        for c in self._cbs:
-            c(self._v)
+    @data.setter
+    def data(self, data: Any):
+        self._data = data
+        for c in self._callbacks:
+            c(self._data)
 
     @property
-    def cbs(self):
-        return self._cbs
+    def callbacks(self):
+        return self._callbacks
 
-    @cbs.setter
-    def cbs(self, callbacks):
-        self._cbs = callbacks
+    @callbacks.setter
+    def callbacks(self, callbacks):
+        self._callbacks = callbacks
