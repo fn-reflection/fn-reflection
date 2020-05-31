@@ -11,8 +11,8 @@ class Observed:
         return self._data
 
     @data.setter
-    def data(self, data: Any):
-        self._data = data
+    def data(self, value: Any):
+        self._data = value
         for c in self._callbacks:
             c(self._data)
 
