@@ -1,4 +1,4 @@
-from collections import defaultdict, deque
+from collections import deque
 from collections.abc import MutableMapping
 from threading import Lock
 
@@ -56,7 +56,7 @@ class ObservedDict(MutableMapping):
         with self._lock:
             self.store[key] = value
             for callback in self.setitem_callbacks:
-                callback(self.store, key, value)
+                callback(self.store, {key: value})
 
     def __delitem__(self, key):
         with self._lock:
@@ -82,7 +82,8 @@ class ObservedDict(MutableMapping):
             else:
                 self.store.update(**kwargs)
             for callback in self.update_callbacks:
-                callback(self.store, m, kwargs)
+                d = dict(m, **kwargs) if m is not None else kwargs
+                callback(self.store, d)
 
 
 class ObservedDefaultDict(MutableMapping):
@@ -111,7 +112,7 @@ class ObservedDefaultDict(MutableMapping):
         with self._lock:
             self.store[key] = value
             for callback in self.setitem_callbacks:
-                callback(self.store, key, value)
+                callback(self.store, {key: value})
 
     def __delitem__(self, key):
         with self._lock:
@@ -137,7 +138,8 @@ class ObservedDefaultDict(MutableMapping):
             else:
                 self.store.update(**kwargs)
             for callback in self.update_callbacks:
-                callback(self.store, m, kwargs)
+                d = dict(m, **kwargs) if m is not None else kwargs
+                callback(self.store, d)
 
 
 class ObservedDeque(deque):
