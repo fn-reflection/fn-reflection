@@ -1,5 +1,6 @@
 from . import collections
 from . import concurrent
+from . import datetime
 from . import debug
 from . import exception
 from . import file
