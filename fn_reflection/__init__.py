@@ -13,4 +13,5 @@ from . import time
 from . import thread_safe_collections
 from . import typed_dict
 from . import urllib
+from . import yaml
 version = '1.1.0'
