@@ -29,13 +29,18 @@ def try_with_post_mortem(procedure: Callable, callback: Callable, *args, **kwarg
         callback(tb)
 
 
-def summary_message(tb, max_frame=10):
-    stack_list = traceback.format_tb(tb)[:max_frame]
+def locals_json(tb, max_frame=100):
     local_var_list = []
     for _ in range(max_frame):
         local_vars = dict(tb.tb_frame.f_locals.items())
-        local_var_list.append(str(local_vars))
+        local_var_list.append(local_vars)
         tb = tb.tb_next
         if tb is None:
             break
+    return local_var_list
+
+
+def summary_message(tb, max_frame=10):
+    stack_list = traceback.format_tb(tb)[:max_frame]
+    local_var_list = [str(local_vars) for local_vars in locals_json(tb, max_frame=max_frame)]
     return "\n".join(["\n".join(pair) for pair in zip(local_var_list, stack_list)])
