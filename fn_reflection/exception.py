@@ -18,3 +18,24 @@ def try_with_dump_traceback(procedure: Callable, logger, file_prefix: str = '',
         logger.error(e)
         to_pickle_with_timestamp(
             obj=tb, prefix=file_prefix, makedirs=makedirs, protocol=pickle_protocol)
+
+
+def try_with_post_mortem(procedure: Callable, callback: Callable, *args, **kwargs):
+    try:
+        res = procedure(*args, **kwargs)
+        return res
+    except Exception as _e:
+        _, _, tb = sys.exc_info()
+        callback(tb)
+
+
+def summary_message(tb, max_frame=10):
+    stack_list = traceback.format_tb(tb)[:max_frame]
+    local_var_list = []
+    for _ in range(max_frame):
+        local_vars = dict(tb.tb_frame.f_locals.items())
+        local_var_list.append(str(local_vars))
+        tb = tb.tb_next
+        if tb is None:
+            break
+    return "\n".join(["\n".join(pair) for pair in zip(local_var_list, stack_list)])
