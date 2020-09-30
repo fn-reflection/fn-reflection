@@ -22,7 +22,7 @@ def to_pickle_with_timestamp(obj, protocol: int, prefix: str = '', makedirs: boo
 
 def from_pickle(pickle_file):
     with open(pickle_file, mode='rb') as f:
-        obj = pickle.load(file=f)
+        obj = cloudpickle.load(file=f)
     return obj
 
 
