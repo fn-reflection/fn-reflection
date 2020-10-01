@@ -1,8 +1,12 @@
 import pickle
 import time
 import ssl
+import threading
 from pathlib import Path
-import cloudpickle
+import copyreg
+import types
+import _queue
+import socketio
 import _io
 import _thread
 
@@ -22,23 +26,20 @@ def to_pickle_with_timestamp(obj, protocol: int, prefix: str = '', makedirs: boo
 
 def from_pickle(pickle_file):
     with open(pickle_file, mode='rb') as f:
-        obj = cloudpickle.load(file=f)
+        obj = pickle.load(file=f)
     return obj
 
 
-def pickle__thread_LockType(_obj):
-    return lambda: _thread.LockType, ()
+def pickle_to_none(_obj):
+    return str, (str(_obj),)
 
 
-def pickle_ssl_SSLSocket(_obj):
-    return lambda: ssl.SSLSocket, ()
-
-
-def pickle__io_TextIOWrapper(_obj):
-    return lambda: _io.TextIOWrapper, ()
-
-
-def update_cloudpickler_dispatchtable():
-    cloudpickle.CloudPickler.dispatch[_thread.LockType] = pickle__thread_LockType
-    cloudpickle.CloudPickler.dispatch[ssl.SSLSocket] = pickle_ssl_SSLSocket
-    cloudpickle.CloudPickler.dispatch[_io.TextIOWrapper] = pickle__io_TextIOWrapper
+def update_copyreg_dispatchtable():
+    copyreg.pickle(_thread.LockType, pickle_to_none)
+    copyreg.pickle(threading.Thread, pickle_to_none)
+    copyreg.pickle(ssl.SSLSocket, pickle_to_none)
+    copyreg.pickle(_io.TextIOWrapper, pickle_to_none)
+    copyreg.pickle(types.ModuleType, pickle_to_none)
+    copyreg.pickle(types.FunctionType, pickle_to_none)
+    copyreg.pickle(_queue.SimpleQueue, pickle_to_none)
+    copyreg.pickle(socketio.client.Client, pickle_to_none)
