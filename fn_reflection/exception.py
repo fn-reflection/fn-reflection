@@ -22,9 +22,9 @@ def try_with_dump_traceback(procedure: Callable, logger, file_prefix: str = '',
             obj=tb, prefix=file_prefix, makedirs=makedirs, protocol=pickle_protocol)
 
 
-def try_with_excepthook(procedure: Callable, excepthook: Callable, *args, **kwargs):
+def try_with_excepthook(procedure: Callable, excepthook: Callable):
     try:
-        res = procedure(*args, **kwargs)
+        res = procedure()
         return res
     except Exception as _e:
         _, _, tb = sys.exc_info()
