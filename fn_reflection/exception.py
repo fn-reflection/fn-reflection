@@ -27,8 +27,8 @@ def try_with_excepthook(procedure: Callable, excepthook: Callable):
         res = procedure()
         return res
     except Exception as _e:
-        _, _, tb = sys.exc_info()
-        excepthook(tb)
+        e_type, e_val, tb = sys.exc_info()
+        excepthook(e_type, e_val, tb)
 
 
 def locals_json(tb, depth, frames):
@@ -42,10 +42,15 @@ def locals_json(tb, depth, frames):
     return reversed(local_var_list)
 
 
-def summary_message(tb, depth, frames):
-    local_var_list = [str(local_vars) for local_vars in locals_json(tb, depth=depth, frames=frames)]
+def pretty_local_vars(local_vars):
+    return "\n".join([f"{k}:{v}" for k, v in local_vars.items()])
+
+
+def summary_message(e_type, e_val, tb, depth, frames):
+    local_var_list = [pretty_local_vars(local_vars) for local_vars in locals_json(tb, depth=depth, frames=frames)]
     stack_list = reversed(traceback.format_tb(tb)[-frames:])
-    return "\n".join(["\n".join(pair) for pair in zip(local_var_list, stack_list)])
+    stack_summary = "\n".join(["\n".join(pair) for pair in zip(local_var_list, stack_list)])
+    return f"{e_type},{e_val}\n{stack_summary}"
 
 
 def traceback_depth(tb) -> int:
@@ -56,14 +61,13 @@ def traceback_depth(tb) -> int:
     return res
 
 
-def excepthook_for_discord(discord_connector, tb, summary_frames, tb_frames):
+def excepthook_for_discord(discord_connector, e_type, e_val, tb, summary_frames):
     depth = traceback_depth(tb)
-    summary = summary_message(tb, depth=depth, frames=summary_frames)
-    locals_pickle = pickle.dumps(obj=locals_json(tb, depth=depth, frames=tb_frames))
-    locals_filename = f"locals_{yymmddhhmmss()}_{hashlib.md5(locals_pickle).hexdigest()}.pickle"
-    loading_script = f"fn_reflection.pickle.from_pickle('{locals_filename}')"
-    message = {'content': f"{loading_script}\n{summary}"[:2000],
-               'file': {locals_filename: locals_pickle, 'summary.yml': summary}}
+    summary = summary_message(e_type, e_val, tb, depth=depth, frames=summary_frames)
+#    locals_pickle = pickle.dumps(obj=locals_json(tb, depth=depth, frames=tb_frames))
+    locals_filename = f"locals_{yymmddhhmmss()}.txt"
+    message = {'content': f"{summary}"[:2000],
+               'file': {locals_filename: summary}}
     discord_post(discord_connector, message)
 
 
