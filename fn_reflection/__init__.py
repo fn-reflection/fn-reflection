@@ -2,6 +2,7 @@ from . import collections
 from . import concurrent
 from . import datetime
 from . import debug
+from . import discord
 from . import exception
 from . import file
 from . import importlib

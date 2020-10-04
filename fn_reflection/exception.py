@@ -1,12 +1,12 @@
 # pylint:disable=broad-except
 import sys
 from typing import Callable
-import hashlib
 import pickle
 import traceback
 from .pickle import to_pickle_with_timestamp
 from .time import yymmddhhmmss
 from .pickle import update_copyreg_dispatchtable
+from .discord import discord_post
 update_copyreg_dispatchtable()
 
 
@@ -69,10 +69,3 @@ def excepthook_for_discord(discord_connector, e_type, e_val, tb, summary_frames)
     message = {'content': f"{summary}"[:2000],
                'file': {locals_filename: summary}}
     discord_post(discord_connector, message)
-
-
-def discord_post(discord_connector, message):
-    if isinstance(message, str):
-        discord_connector.post(content=message)
-    elif isinstance(message, dict):
-        discord_connector.post(**message)
