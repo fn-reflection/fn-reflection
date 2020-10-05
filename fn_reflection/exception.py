@@ -1,5 +1,7 @@
 # pylint:disable=broad-except
+from functools import partial
 import sys
+import time
 from typing import Callable
 import pickle
 import traceback
@@ -7,6 +9,7 @@ from .pickle import to_pickle_with_timestamp
 from .time import yymmddhhmmss
 from .pickle import update_copyreg_dispatchtable
 from .discord import discord_post
+from .sys import run_in_thread
 update_copyreg_dispatchtable()
 
 
@@ -29,6 +32,17 @@ def try_with_excepthook(procedure: Callable, excepthook: Callable):
     except Exception as _e:
         e_type, e_val, tb = sys.exc_info()
         excepthook(e_type, e_val, tb)
+
+
+def reraise_loop(procedure: Callable, excepthook: Callable, wait_secs: float):
+    while True:
+        try_with_excepthook(procedure=procedure, excepthook=excepthook)
+        time.sleep(wait_secs)
+
+
+def run_reraise_loop_in_thread(procedure: Callable, excepthook: Callable, wait_secs: float, daemon=True):
+    func = partial(reraise_loop, procedure=procedure, excepthook=excepthook, wait_secs=wait_secs)
+    return run_in_thread(func, daemon=daemon)
 
 
 def locals_json(tb, depth, frames):
