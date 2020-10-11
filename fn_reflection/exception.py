@@ -13,26 +13,6 @@ from .sys import run_in_thread
 update_copyreg_dispatchtable()
 
 
-def try_with_dump_traceback(procedure: Callable, logger, file_prefix: str = '',
-                            pickle_protocol: int = pickle.HIGHEST_PROTOCOL, makedirs=True):
-    try:
-        procedure()
-    except Exception as e:
-        _, _, tb = sys.exc_info()
-        print(traceback.format_exc())
-        logger.error(e)
-        to_pickle_with_timestamp(
-            obj=tb, prefix=file_prefix, makedirs=makedirs, protocol=pickle_protocol)
-
-
-def try_with_excepthook(procedure: Callable, excepthook: Callable):
-    try:
-        res = procedure()
-        return res
-    except Exception as _e:
-        e_type, e_val, tb = sys.exc_info()
-        excepthook(e_type, e_val, tb)
-
 
 def reraise_loop(procedure: Callable, excepthook: Callable, wait_secs: float):
     while True:
