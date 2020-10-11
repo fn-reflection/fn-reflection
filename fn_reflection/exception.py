@@ -3,11 +3,8 @@ from functools import partial
 import sys
 import time
 from typing import Callable
-import pickle
 import traceback
-from .pickle import to_pickle_with_timestamp
 from .time import yymmddhhmmss
-from .pickle import update_copyreg_dispatchtable
 from .discord import discord_post
 from .sys import run_in_thread
 
