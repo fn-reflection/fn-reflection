@@ -10,8 +10,6 @@ from .time import yymmddhhmmss
 from .pickle import update_copyreg_dispatchtable
 from .discord import discord_post
 from .sys import run_in_thread
-update_copyreg_dispatchtable()
-
 
 
 def reraise_loop(procedure: Callable, excepthook: Callable, wait_secs: float):
