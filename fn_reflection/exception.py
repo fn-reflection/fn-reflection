@@ -12,6 +12,15 @@ from .discord import discord_post
 from .sys import run_in_thread
 
 
+def try_with_excepthook(procedure: Callable, excepthook: Callable):
+    try:
+        res = procedure()
+        return res
+    except Exception as _e:
+        e_type, e_val, tb = sys.exc_info()
+        excepthook(e_type, e_val, tb)
+
+
 def reraise_loop(procedure: Callable, excepthook: Callable, wait_secs: float):
     while True:
         try_with_excepthook(procedure=procedure, excepthook=excepthook)
