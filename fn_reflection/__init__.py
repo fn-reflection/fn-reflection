@@ -15,5 +15,6 @@ from . import time
 from . import thread_safe_collections
 from . import typed_dict
 from . import urllib
+from . import websocket
 from . import yaml
-version = '1.1.0'
+version = '1.2.0'
