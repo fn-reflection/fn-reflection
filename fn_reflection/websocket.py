@@ -28,4 +28,5 @@ class UDPLikeWebSocketClient:
             self.try_to_connect()
         if not self.ws.connected:
             return
-        self.try_to_send(dict(msg=msg, channel=channel))Ï
+        self.try_to_send(dict(msg=msg, channel=channel))
+        
