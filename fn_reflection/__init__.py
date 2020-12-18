@@ -2,6 +2,7 @@ from . import collections
 from . import concurrent
 from . import datetime
 from . import debug
+from . import discord
 from . import exception
 from . import file
 from . import importlib
@@ -14,4 +15,6 @@ from . import time
 from . import thread_safe_collections
 from . import typed_dict
 from . import urllib
-version = '1.1.0'
+from . import websocket
+from . import yaml
+version = '1.2.0'
