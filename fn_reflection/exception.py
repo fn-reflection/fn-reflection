@@ -64,6 +64,6 @@ def excepthook_for_discord(discord_connector, e_type, e_val, tb, summary_frames)
     summary = summary_message(e_type, e_val, tb, depth=depth, frames=summary_frames)
 #    locals_pickle = pickle.dumps(obj=locals_json(tb, depth=depth, frames=tb_frames))
     locals_filename = f"locals_{yymmddhhmmss()}.txt"
-    message = {'content': f"{summary}"[:2000],
+    message = {'content': f"{e_type},{e_val}",
                'file': {locals_filename: summary}}
     discord_post(discord_connector, message)
