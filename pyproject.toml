@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "fn_reflection"
+version = "1.2.0"
+description = "python utility scripts for my private projects"
+authors = ["NaokiFujita <fujitanaoki0718@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "~3.8" # 現在numbaは3.9未対応
+xxhash = "^2.0.0"
+cloudpickle = "^1.6.0"
+python-socketio = "^5.0.4"
+numba = "^0.52.0"
+websocket_client = "^0.57.0"
+PyYAML = "^5.3.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
