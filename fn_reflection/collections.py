@@ -1,5 +1,6 @@
 import operator
 import itertools
+from itertools import islice, chain
 from typing import Dict, Deque, Callable
 __all__ = ['multiple_sort', 'partition_by',
            'ignore_none_dict', 'renamed_dict', 'CyclicCounter']
@@ -23,6 +24,10 @@ def multiple_sort(xs, specs):
         xs.sort(key=getter(key), reverse=reverse)
     return xs
 
+def chunked(iterable, size: int):
+    iterator = iter(iterable)
+    for first_element_of_batch in iterator: 
+        yield chain([first_element_of_batch], islice(iterator, size - 1))
 
 def ignore_none_dict(**args):
     return {k: v for k, v in args.items() if v is not None}
